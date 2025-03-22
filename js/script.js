@@ -1,219 +1,153 @@
-
-
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile Menu Toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('nav');
     
-    if (mobileMenuBtn) {
+    if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function() {
             this.classList.toggle('active');
             nav.classList.toggle('active');
         });
-    }
-    
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('nav') && !event.target.closest('.mobile-menu-btn')) {
-            if (nav.classList.contains('active')) {
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('nav') && !event.target.closest('.mobile-menu-btn')) {
                 nav.classList.remove('active');
                 mobileMenuBtn.classList.remove('active');
             }
-        }
-    });
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const bentoImages = document.querySelectorAll('.bento-image');
-    
-        // Ensure all images are hidden on load
-        bentoImages.forEach(image => {
-            image.style.opacity = '0';
         });
-    
-        // Add hover effects
-        bentoImages.forEach(image => {
-            image.addEventListener('mouseenter', function() {
-                this.style.opacity = '1';
-            });
-    
-            image.addEventListener('mouseleave', function() {
-                this.style.opacity = '0';
-            });
-        });
-    });
-    
+    }
 
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
+            const targetElement = document.querySelector(this.getAttribute('href'));
             if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
                 
-                // Close mobile menu after clicking a link
-                if (nav.classList.contains('active')) {
-                    nav.classList.remove('active');
-                    mobileMenuBtn.classList.remove('active');
-                }
-                
+                // Close menu after clicking a link
+                nav?.classList.remove('active');
+                mobileMenuBtn?.classList.remove('active');
+
                 // Update active link
-                document.querySelectorAll('nav a').forEach(link => {
-                    link.classList.remove('active');
-                });
+                document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
                 this.classList.add('active');
             }
         });
     });
 
-    
     // Active navigation based on scroll position
     window.addEventListener('scroll', function() {
         const scrollPosition = window.scrollY;
+        const header = document.querySelector('header');
         
         document.querySelectorAll('section').forEach(section => {
             const sectionTop = section.offsetTop - 100;
             const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
             if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
                 document.querySelectorAll('nav a').forEach(link => {
                     link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
+                    if (link.getAttribute('href') === `#${section.id}`) {
                         link.classList.add('active');
                     }
                 });
             }
         });
-        
+
         // Header shadow on scroll
-        const header = document.querySelector('header');
-        if (scrollPosition > 50) {
-            header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-        } else {
-            header.style.boxShadow = 'none';
+        if (header) {
+            header.style.boxShadow = scrollPosition > 50 ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none';
         }
     });
-    
+
     // Project Details Modal
     const bentoItems = document.querySelectorAll('.bento-item');
     const projectDetailsSection = document.getElementById('project-details');
     const projectContent = document.querySelector('.project-content');
     const closeBtn = document.querySelector('.close-btn');
     
-    bentoItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const projectId = this.getAttribute('data-project');
-            const template = document.getElementById(`${projectId}-template`);
-            
-            if (template) {
-                projectContent.innerHTML = template.innerHTML;
-                projectDetailsSection.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
+    if (bentoItems.length > 0 && projectDetailsSection && projectContent) {
+        bentoItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const template = document.getElementById(`${this.getAttribute('data-project')}-template`);
+                if (template) {
+                    projectContent.innerHTML = template.innerHTML;
+                    projectDetailsSection.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
         });
-    });
-    
-    if (closeBtn) {
+    }
+
+    if (closeBtn && projectDetailsSection) {
         closeBtn.addEventListener('click', function() {
             projectDetailsSection.classList.add('hidden');
             document.body.style.overflow = 'auto';
         });
+
+        projectDetailsSection.addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
     }
-    
-    // Close project details when clicking outside
-    projectDetailsSection.addEventListener('click', function(event) {
-        if (event.target === this) {
-            this.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
+
+    // Bento Image Hover Effects
+    document.querySelectorAll('.bento-image').forEach(image => {
+        image.style.opacity = '0';
+        image.addEventListener('mouseenter', () => image.style.opacity = '1');
+        image.addEventListener('mouseleave', () => image.style.opacity = '0');
     });
-});
 
-document.addEventListener('DOMContentLoaded', function() {
-    const bentoImages = document.querySelectorAll('.bento-image');
-
-    bentoImages.forEach(image => {
-        image.addEventListener('mouseenter', function() {
-            showBentoImage(this);
+    // Shape Click Effect
+    const shape = document.querySelector('.shape');
+    if (shape) {
+        shape.style.transition = 'transform 0.2s ease-in-out';
+        shape.addEventListener('click', () => {
+            shape.style.transform = 'scale(1.1)';
+            setTimeout(() => shape.style.transform = 'scale(1)', 150);
         });
+    }
 
-        image.addEventListener('mouseleave', function() {
-            hideBentoImage(this);
+   
+});
+
+
+ // Contact Form Handling
+ const contactForm = document.querySelector('.contact-form');            
+ if (contactForm) {
+     contactForm.addEventListener('submit', function(event) {
+         event.preventDefault();
+         const name = document.getElementById('name')?.value.trim();
+         const email = document.getElementById('email')?.value.trim();
+         const message = document.getElementById('message')?.value.trim();
+         
+         if (!name || !email || !message) {
+             alert('Please fill in all fields');
+             return;
+         }
+                     
+
+         const submitBtn = this.querySelector('button[type="submit"]');
+         submitBtn.textContent = 'Sending...';
+         submitBtn.disabled = true;
+         console.log("Sending email with:", { name, email, message });            
+         emailjs.send(
+            "service_oxlwv8g", 
+            "template_v5myc33", 
+            { name, email, message },
+            "h7gXkocBBxesse-2j"
+        ).then(() => {
+            alert('Message sent successfully!');
+            submitBtn.textContent = 'Send Message';
+            submitBtn.disabled = true;
+        }).catch((error) => {
+            console.error('EmailJS Error:', error);
+            alert('Failed to send message. Check the console for details.');
         });
-    });
-});
-
-// Hide the bento image when the user is not hovering over it
-function hideBentoImage(image) {
-    image.style.opacity = '0';
-}
-
-// Show the bento image when the user is hovering over it
-function showBentoImage(image) {
-    image.style.opacity = '1';
-}
-
-const shape = document.querySelector(".shape")
-
-shape.addEventListener("click", () => {
-
-
-    // Quick visual feedback (pulse effect)
-    shape.style.transform = "scale(1.1)";
-    setTimeout(() => shape.style.transform = "scale(1)", 150);
-});
-
-
-// Add a transition to the shape
-shape.style.transition = "transform 0.2s ease-in-out";
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const contactForm = document.querySelector(".contact-form");
-
-    contactForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent default form submission
-
-        // Get form values
-        let parms = {
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            message: document.getElementById("message").value
-        };
-
-        // Simple validation
-        if (!parms.name || !parms.email || !parms.message) {
-            alert("Please fill in all fields");
-            return;
-        }
-
-        // Disable the button while sending
-        const submitBtn = this.querySelector('button[type="submit"]');
-        submitBtn.textContent = "Sending...";
-        submitBtn.disabled = true;
-
-        // Send email via EmailJS
-        emailjs.send("service_oxlwv8g", "template_v5myc33", parms)
-            .then(response => {
-                console.log("Email sent successfully", response);
-                alert("Message sent successfully!");
-                contactForm.reset();
-            })
-            .catch(error => {
-                console.error("Email failed to send", error);
-                alert("Failed to send message. Please try again.");
-            })
-            .finally(() => {
-                submitBtn.textContent = "Send Message";
-                submitBtn.disabled = false;
-            });
-    });
-});
+        
+         
+     });
+ }
