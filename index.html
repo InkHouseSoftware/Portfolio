@@ -8,6 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+  <script type="text/javascript">
+        (function(){
+        emailjs.init("h7gXkocBBxesse-2j");
+                  
+        })();
+</script>
 </head>
 <body>
     <header>
@@ -158,8 +168,7 @@
                             </div>
                         </div>
                     </div>
-                    <form class="contact-form" action="https://formspree.io/f/mjkyggen?email=inkhousesoftware@gmail.com"
-                    method="POST">
+                    <form class="contact-form"     method="POST">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_next" value="https://yourwebsite.com/thank-you.html">
                         
@@ -178,7 +187,7 @@
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
                     
-                        <button type="submit" class="btn primary">Send Message</button>
+                        <button type="submit" class="btn primary" onclick="sendEmail()">Send Message</button>
                     </form>
                     
                 </div>
