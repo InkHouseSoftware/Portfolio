@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
     
     // Active navigation based on scroll position
     window.addEventListener('scroll', function() {
@@ -133,38 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = 'auto';
         }
     });
-    
-    // Form submission
-    const contactForm = document.querySelector('.contact-form');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const name = this.querySelector('#name').value;
-            const email = this.querySelector('#email').value;
-            const message = this.querySelector('#message').value;
-            
-            // Simple validation
-            if (!name || !email || !message) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            // Simulate form submission
-            const submitBtn = this.querySelector('button[type="submit"]');
-            submitBtn.textContent = 'Sending...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                alert('Message sent successfully!');
-                this.reset();
-                submitBtn.textContent = 'Send Message';
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-    }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -204,3 +173,47 @@ shape.addEventListener("click", () => {
 
 // Add a transition to the shape
 shape.style.transition = "transform 0.2s ease-in-out";
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const contactForm = document.querySelector(".contact-form");
+
+    contactForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get form values
+        let parms = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            message: document.getElementById("message").value
+        };
+
+        // Simple validation
+        if (!parms.name || !parms.email || !parms.message) {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        // Disable the button while sending
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.textContent = "Sending...";
+        submitBtn.disabled = true;
+
+        // Send email via EmailJS
+        emailjs.send("service_oxlwv8g", "template_v5myc33", parms)
+            .then(response => {
+                console.log("Email sent successfully", response);
+                alert("Message sent successfully!");
+                contactForm.reset();
+            })
+            .catch(error => {
+                console.error("Email failed to send", error);
+                alert("Failed to send message. Please try again.");
+            })
+            .finally(() => {
+                submitBtn.textContent = "Send Message";
+                submitBtn.disabled = false;
+            });
+    });
+});
