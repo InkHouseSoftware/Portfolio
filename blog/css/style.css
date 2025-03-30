@@ -235,6 +235,7 @@ nav ul li a.active::after {
 .blog-post-container:hover {
   transform: scale(1.05);
   transition: var(--transition);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
 }
 
 
