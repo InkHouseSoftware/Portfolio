@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mobile Menu Toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('nav');
+    const images = document.querySelectorAll('.bento-image');
     
     if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function() {
@@ -101,15 +102,37 @@ document.addEventListener('DOMContentLoaded', function() {
         image.addEventListener('mouseleave', () => image.style.opacity = '0');
     });
 
-    // Shape Click Effect
-    const shape = document.querySelector('.shape');
-    if (shape) {
-        shape.style.transition = 'transform 0.2s ease-in-out';
-        shape.addEventListener('click', () => {
-            shape.style.transform = 'scale(1.1)';
-            setTimeout(() => shape.style.transform = 'scale(1)', 150);
-        });
-    }
+
+// Intersection Observer for mobile
+const observer = new IntersectionObserver(
+(entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+        } else {
+            entry.target.style.opacity = '0';
+        }
+    });
+},
+{ threshold: 0.2 } // Adjust threshold as needed
+);
+images.forEach(image => observer.observe(image));
+                
+
+
+
+    
+
+
+// Shape Click Effect
+const shape = document.querySelector('.shape');
+if (shape) {
+    shape.style.transition = 'transform 0.2s ease-in-out';
+    shape.addEventListener('click', () => {
+        shape.style.transform = 'scale(1.1)';
+        setTimeout(() => shape.style.transform = 'scale(1)', 150);
+    });
+}
 
    
 });
